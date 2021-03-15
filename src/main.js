@@ -191,6 +191,7 @@ Apify.main(async () => {
         headless: headfull ? undefined : true,
         useChrome,
         userAgent: useGoogleBotHeaders ? GOOGLE_BOT_HEADERS['User-Agent'] : Apify.utils.getRandomUserAgent(),
+        liveView: headfull,
     };
 
     const puppeteerPoolOptions = { retireInstanceAfterRequestCount };
