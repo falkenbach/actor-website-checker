@@ -106,7 +106,7 @@ Apify.main(async () => {
                   page.click(act[1]),
                 ]);                
             }
-            sleep(3000);
+            await sleep(3000);
         }
         
         let screenshotUrl;
