@@ -1,7 +1,7 @@
 const Apify = require('apify');
 const cheerio = require('cheerio');
 
-const { log } = Apify.utils;
+const { log, sleep } = Apify.utils;
 
 const { testHtml } = require('./checkers.js');
 const { toSimpleState } = require('./utils.js');
@@ -20,6 +20,7 @@ Apify.main(async () => {
         maxPagesPerCrawl,
         saveSnapshots = false,
         type = 'cheerio',
+        actions = [],
         proxyConfiguration = { useApifyProxy: true },
         replicateStartUrls = 0,
         retireInstanceAfterRequestCount = 10,
@@ -92,6 +93,22 @@ Apify.main(async () => {
             await page.waitFor(maybeNumber || maybeNumber === 0 ? maybeNumber : waitFor);
         }
 
+        for (const a of actions) {
+            const act = a.split('|');
+            if (act[0] === 'fill') {
+                log.info(`...typing ${act[1]} ${act[2]}`);
+                const el = await page.$(act[1]);
+                await el.type(act[2]);
+            } else if (act[0] === 'click') {
+                log.info(`...clicking ${act[1]}`);
+                const [response] = await Promise.all([
+                  page.waitForNavigation({ timeout: 5000 }),
+                  page.click(act[1]),
+                ]);                
+            }
+            sleep(3000);
+        }
+        
         let screenshotUrl;
         let htmlUrl;
         if (saveSnapshots) {
