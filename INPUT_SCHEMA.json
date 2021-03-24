@@ -20,6 +20,12 @@
             "enum": ["cheerio", "puppeteer"],
             "default": "cheerio"
         },
+        "actions": {
+          "title": "Pptr actions",
+          "type": "array",
+          "description": "strings in format ActionType|Selector|Value",
+          "editor": "json"
+        },        
         "linkSelector": {
             "title": "Link selector",
             "type": "string",
