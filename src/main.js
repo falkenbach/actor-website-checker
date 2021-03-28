@@ -95,16 +95,21 @@ Apify.main(async () => {
 
         for (const a of actions) {
             const act = a.split('|');
+            let el;
             if (act[0] === 'fill') {
                 log.info(`...typing ${act[1]} ${act[2]}`);
-                const el = await page.$(act[1]);
+                el = await page.$(act[1]);
                 await el.type(act[2]);
             } else if (act[0] === 'click') {
                 log.info(`...clicking ${act[1]}`);
                 const [response] = await Promise.all([
-                  page.waitForNavigation({ timeout: 5000 }),
+                  page.waitForNavigation({ timeout: 60000 }),
                   page.click(act[1]),
                 ]);                
+            } else if (act[0] === 'hover') {
+                log.info(`...hover ${act[1]}`);
+                el = await page.$(act[1]);
+                await element.hover();
             }
             await sleep(3000);
         }
