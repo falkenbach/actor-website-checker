@@ -109,7 +109,7 @@ Apify.main(async () => {
             } else if (act[0] === 'hover') {
                 log.info(`...hover ${act[1]}`);
                 el = await page.$(act[1]);
-                await element.hover();
+                await el.hover();
             }
             await sleep(3000);
         }
@@ -117,7 +117,7 @@ Apify.main(async () => {
         let screenshotUrl;
         let htmlUrl;
         if (saveSnapshots) {
-            const key = `SNAPSHOT-${Math.random().toString()}`;
+            const key = `SNAPSHOT-${new Date().getTime()}`;
             if (page) {
                 await Apify.utils.puppeteer.saveSnapshot(page, { key });
                 screenshotUrl = `https://api.apify.com/v2/key-value-stores/${Apify.getEnv().defaultKeyValueStoreId}/records/${key}.jpg?disableRedirect=true`
