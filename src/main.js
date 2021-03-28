@@ -102,10 +102,16 @@ Apify.main(async () => {
                 await el.type(act[2]);
             } else if (act[0] === 'click') {
                 log.info(`...clicking ${act[1]}`);
+                await page.click(act[1]);
+                if (act.length > 2) {
+                    await sleep(parseInt(act[2]));
+                }
+                /*
                 const [response] = await Promise.all([
-                  page.waitForNavigation({ timeout: 60000 }),
+                  page.waitForNavigation({ timeout: 999999 }),
                   page.click(act[1]),
-                ]);                
+                ]);
+                */
             } else if (act[0] === 'hover') {
                 log.info(`...hover ${act[1]}`);
                 el = await page.$(act[1]);
@@ -214,8 +220,8 @@ Apify.main(async () => {
         useChrome,
         userAgent: useGoogleBotHeaders ? GOOGLE_BOT_HEADERS['User-Agent'] : Apify.utils.getRandomUserAgent(),
         liveView: headfull,
-        navigationTimeoutSecs: 600,
-        handlePageTimeoutSecs: 600, // https://sdk.apify.com/docs/typedefs/puppeteer-crawler-options#handlepagetimeoutsecs
+        navigationTimeoutSecs: 999999,
+        handlePageTimeoutSecs: 999999, // https://sdk.apify.com/docs/typedefs/puppeteer-crawler-options#handlepagetimeoutsecs
     };
 
     const puppeteerPoolOptions = { retireInstanceAfterRequestCount };
