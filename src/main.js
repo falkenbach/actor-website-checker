@@ -93,31 +93,35 @@ Apify.main(async () => {
             await page.waitFor(maybeNumber || maybeNumber === 0 ? maybeNumber : waitFor);
         }
 
-        for (const a of actions) {
-            const act = a.split('|');
-            let el;
-            if (act[0] === 'fill') {
-                log.info(`...typing ${act[1]} ${act[2]}`);
-                el = await page.$(act[1]);
-                await el.type(act[2]);
-            } else if (act[0] === 'click') {
-                log.info(`...clicking ${act[1]}`);
-                await page.click(act[1]);
-                if (act.length > 2) {
-                    await sleep(parseInt(act[2]));
+        try {
+            for (const a of actions) {
+                const act = a.split('|');
+                let el;
+                if (act[0] === 'fill') {
+                    log.info(`...typing ${act[1]} ${act[2]}`);
+                    el = await page.$(act[1]);
+                    await el.type(act[2]);
+                } else if (act[0] === 'click') {
+                    log.info(`...clicking ${act[1]}`);
+                    await page.click(act[1]);
+                    if (act.length > 2) {
+                        await sleep(parseInt(act[2]));
+                    }
+                    /*
+                    const [response] = await Promise.all([
+                      page.waitForNavigation({ timeout: 999999 }),
+                      page.click(act[1]),
+                    ]);
+                    */
+                } else if (act[0] === 'hover') {
+                    log.info(`...hover ${act[1]}`);
+                    el = await page.$(act[1]);
+                    await el.hover();
                 }
-                /*
-                const [response] = await Promise.all([
-                  page.waitForNavigation({ timeout: 999999 }),
-                  page.click(act[1]),
-                ]);
-                */
-            } else if (act[0] === 'hover') {
-                log.info(`...hover ${act[1]}`);
-                el = await page.$(act[1]);
-                await el.hover();
+                await sleep(3000);
             }
-            await sleep(3000);
+        } catch (err) {
+            log.error('FAILED', { error: err.stack || err });
         }
         
         let screenshotUrl;
