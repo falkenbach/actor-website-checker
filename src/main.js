@@ -214,6 +214,7 @@ Apify.main(async () => {
         useChrome,
         userAgent: useGoogleBotHeaders ? GOOGLE_BOT_HEADERS['User-Agent'] : Apify.utils.getRandomUserAgent(),
         liveView: headfull,
+        navigationTimeoutSecs: 600,
         handlePageTimeoutSecs: 600, // https://sdk.apify.com/docs/typedefs/puppeteer-crawler-options#handlepagetimeoutsecs
     };
 
