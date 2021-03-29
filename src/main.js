@@ -94,7 +94,7 @@ Apify.main(async () => {
         }
 
         try {
-            for (const a of actions) {
+            if (page) for (const a of actions) {
                 const act = a.split('|');
                 let el;
                 if (act[0] === 'fill') {
@@ -214,7 +214,7 @@ Apify.main(async () => {
         handlePageFunction,
         handleFailedRequestFunction,
         proxyUrls: proxyUrl ? [proxyUrl] : null,
-        additionalMimeTypes: ['application/xml'], // For CheerioCrawler
+        additionalMimeTypes: ['application/xml', 'application/json'], // For CheerioCrawler
     };
 
     const launchPuppeteerOptions = {
